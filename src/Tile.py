@@ -28,8 +28,6 @@ class Tile:
         self.button = Button(height=3, width=6, bg=self.empty['color'])
         self.button.bind('<Enter>', lambda event: self.highlight_tile())
         self.button.bind('<Leave>', lambda event: self.de_highlight_tile())
-        self.button.bind('<Button-3>', lambda event: self.right_click())
-        self.button.bind('<Button-1>', lambda event: self.left_click())
 
         # each tile starts out as empty
         self.state = self.states[0]
@@ -44,26 +42,6 @@ class Tile:
         if self.state == self.states[0] or self.state == self.states[-1]:
             self.button.config(relief='raised')
 
-    def left_click(self):
-        """ Handles the left click event. """
-
-        # if empty tile, then place a clue
-        if self.state == self.states[0]:
-            self.state = self.states[1]
-            self.show_clue()
-
-        # if clue tile, then do nothing
-        elif self.state == self.states[1]:
-            return
-
-        # if flag tile, then do nothing
-        elif self.state == self.states[2][0] or self.state == self.states[2][1]:
-            return
-
-        # if bomb tile, then explode cutscene, end game.
-        elif self.state == self.states[-1]:
-            self.show_bomb()
-
     def show_empty(self):
         """ Change how this tile looks to being empty (or a bomb). """
         self.button.config(relief='raised')
@@ -71,12 +49,12 @@ class Tile:
         self.button.config(bg=self.empty['color'])
         self.button.config(text=self.empty['text'])
 
-    def show_clue(self):
+    def show_clue(self, clue_number):
         """ Change how this tile looks to being a clue. """
         self.button.config(relief='raised')
         self.button.config(state='disabled')
         self.button.config(bg=self.clue['color'])
-        self.button.config(text=self.clue['text'])  # how many surrounding bombs
+        self.button.config(text=str(clue_number))  # how many surrounding bombs
 
     def show_flag(self):
         """ Change how this tile looks to being a flag. """

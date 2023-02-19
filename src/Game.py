@@ -19,9 +19,14 @@ class Game:
                 self.tile_list[(r, c)].button.grid(row=r, column=c)
 
                 # give each button a bind
-                def make_lambda(x):
-                    return lambda event: self.right_click(x)
-                self.tile_list[(r, c)].button.bind('<Button-3>', make_lambda((r, c)))
+                def make_lambda(param, which):
+                    if which == 'right_click':
+                        return lambda event: self.right_click(param)
+                    elif which == 'left_click':
+                        return lambda event: self.left_click(param)
+
+                self.tile_list[(r, c)].button.bind('<Button-3>', make_lambda((r, c), 'right_click'))
+                self.tile_list[(r, c)].button.bind('<Button-1>', make_lambda((r, c), 'left_click'))
 
     def right_click(self, position):
         """ Handles the right click event. """
@@ -47,8 +52,60 @@ class Game:
             this_tile.state = this_tile.states[-1]
             this_tile.show_empty()
 
+    def left_click(self, position):
+        """ Handles the left click event. """
+        this_tile = self.tile_list[position]
+
+        # if empty tile, then place a clue
+        if this_tile.state == this_tile.states[0]:
+            this_tile.state = this_tile.states[1]
+            this_tile.show_clue(self.count_bombs(position))
+
+        # if clue tile, then do nothing
+        elif this_tile.state == this_tile.states[1]:
+            return
+
+        # if flag tile, then do nothing
+        elif this_tile.state == this_tile.states[2][0] or this_tile.state == this_tile.states[2][1]:
+            return
+
+        # if bomb tile, then explode cutscene, end game.
+        elif this_tile.state == this_tile.states[-1]:
+            this_tile.show_bomb()
+
     def place_bomb(self, position):
         """ Changes the state of one tile to a bomb. position is tuple (posx, posy)"""
         this_tile = self.tile_list[position]
         this_tile.state = this_tile.states[-1]
         this_tile.show_empty()
+
+    def get_surrounding(self, position):
+        """ Returns a list of the legal, surrounding (including center) spaces. """
+        surrounding = [
+            (position[0] - 0, position[1] - 0),  # 5, 5
+            (position[0] - 0, position[1] - 1),  # 5, 4
+            (position[0] - 0, position[1] + 1),  # 5, 6
+            (position[0] - 1, position[1] - 0),  # 4, 5
+            (position[0] - 1, position[1] - 1),  # 4, 4
+            (position[0] - 1, position[1] + 1),  # 4, 6
+            (position[0] + 1, position[1] - 0),  # 5, 5
+            (position[0] + 1, position[1] - 1),  # 5, 5
+            (position[0] + 1, position[1] + 1),  # 5, 5
+        ]
+        legal_surrounding = []
+        # only consider the legal spaces (not off the board)
+        for space in surrounding:
+            if space[0] in range(0, self.rows) and space[1] in range(0, self.columns):
+                legal_surrounding.append(space)
+
+        return legal_surrounding
+
+    def count_bombs(self, position):
+        """ Returns the amount of bombs in the eight surrounding spaces. """
+        bombs = 0
+
+        # count the bomb in each space
+        for space in self.get_surrounding(position):
+            if self.tile_list[space].state == Tile.states[-1]:
+                bombs += 1
+        return bombs
