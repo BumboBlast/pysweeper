@@ -1,5 +1,4 @@
 import random
-
 from Space import *
 
 
@@ -84,7 +83,7 @@ class Game:
         """ Iterate through all the 0's. Clear all their surrounding spaces. """
         for space in self.space_list.values():
             # if it's a clue and a 0
-            if space.state == Space.states[1] and space.button['text'] == ' ':
+            if space.state == space.states[1] and space.button['text'] == ' ':
                 for surrounding_position in self.get_surrounding(space.position):
                     surrounding_space = self.space_list[surrounding_position]
                     surrounding_space.state = Space.states[1]

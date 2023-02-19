@@ -60,6 +60,7 @@ class Space:
         # if this is first click of the game
         elif self.game_handle.first_click:
             self.game_handle.first_click = False
+            print('furst click')
             empty_spaces = self.game_handle.place_random_mines(self.position)
 
             # clear some spaces around click
@@ -83,6 +84,7 @@ class Space:
         elif self.state == self.states[-1]:
             self.button.config(state='disabled')
             self.button.config(text='bomb')
+            self.button.config(bg='red')
             # end cutscene
 
         self.game_handle.clear_all_empties()
