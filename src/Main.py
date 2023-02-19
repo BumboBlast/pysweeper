@@ -1,4 +1,3 @@
-
 from Game import *
 
 root = Tk()
@@ -9,6 +8,7 @@ number_rows = 10
 number_columns = 15
 game = Game(number_rows, number_columns)
 
+game.place_bomb((1, 1))
 
 # opens the window
 root.mainloop()
