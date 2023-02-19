@@ -1,3 +1,5 @@
+import random
+
 from Tile import *
 
 """ Implements methods that affect the game state. """
@@ -79,6 +81,21 @@ class Game:
         this_tile.state = this_tile.states[-1]
         this_tile.show_empty()
 
+    def place_random_bombs(self, amount):
+        """ places [amount] random bombs onto the grid. """
+        bombs = 0
+        while bombs < amount:
+            # randint is inclusive. Therefore, I do not want an x-coordinate of 10 if I have 10 rows.
+            sample_x = random.randint(0, self.rows - 1)
+            sample_y = random.randint(0, self.columns - 1)
+            new_potential_bomb = self.tile_list[(sample_x, sample_y)]
+
+            # if it's empty, place a bomb.
+            if new_potential_bomb.state == Tile.states[0]:
+                new_potential_bomb.state = Tile.states[-1]
+                new_potential_bomb.show_empty()
+                bombs += 1
+
     def get_surrounding(self, position):
         """ Returns a list of the legal, surrounding (including center) spaces. """
         surrounding = [
@@ -108,4 +125,7 @@ class Game:
         for space in self.get_surrounding(position):
             if self.tile_list[space].state == Tile.states[-1]:
                 bombs += 1
+
+        if bombs == 0:
+            return '  '
         return bombs
