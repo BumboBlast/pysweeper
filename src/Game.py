@@ -1,4 +1,5 @@
 from tkinter import *
+from Tile import *
 
 """ Implements methods that affect the game state. """
 
@@ -12,5 +13,5 @@ class Game:
 
         for r in range(rows):
             for c in range(columns):
-                new_button = Button(height=3, width=6)
-                new_button.grid(row=rows, column=columns)
+                new_tile = Tile(r, c)
+                new_tile.button.grid(row=r, column=c)
