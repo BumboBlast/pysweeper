@@ -32,8 +32,8 @@ class Game:
                     elif which == 'left_click':
                         return lambda event: self.left_click(param)
 
-                self.tile_list[(r, c)].button.bind('<Button-3>', make_lambda((r, c), 'right_click'))
-                self.tile_list[(r, c)].button.bind('<Button-1>', make_lambda((r, c), 'left_click'))
+                self.tile_list[(r, c)].button.bind('<ButtonRelease-3>', make_lambda((r, c), 'right_click'))
+                self.tile_list[(r, c)].button.bind('<ButtonRelease-1>', make_lambda((r, c), 'left_click'))
 
     def right_click(self, position):
         """ Handles the right click event. """
