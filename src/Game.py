@@ -123,7 +123,9 @@ class Game:
 
         # count the bomb in each space
         for space in self.get_surrounding(position):
-            if self.tile_list[space].state == Tile.states[-1]:
+
+            # could be a bomb or a flagged bomb
+            if self.tile_list[space].state == Tile.states[-1] or self.tile_list[space].state == Tile.states[2][1]:
                 bombs += 1
 
         if bombs == 0:
