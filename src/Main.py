@@ -8,7 +8,5 @@ number_rows = 10
 number_columns = 15
 game = Game(number_rows, number_columns)
 
-game.place_random_bombs(10)
-
 # opens the window
 root.mainloop()

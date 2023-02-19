@@ -9,8 +9,13 @@ class Game:
 
     def __init__(self, rows, columns):
         """ Makes a new game with the parameter's number of rows/ columns. """
+
         self.rows = rows
         self.columns = columns
+        self.amount_bombs = 25
+
+        # keeps track of have completed the first click or not.
+        self.not_first_clicked = True
 
         self.tile_list = {}
 
@@ -58,8 +63,15 @@ class Game:
         """ Handles the left click event. """
         this_tile = self.tile_list[position]
 
+        # if it's the first click, then place random bombs away from 3x3 square from that tile.
+        if self.not_first_clicked:
+            self.not_first_clicked = False
+            self.first_click(position, self.amount_bombs)
+            this_tile.state = this_tile.states[1]
+            this_tile.show_clue(self.count_bombs(position))
+
         # if empty tile, then place a clue
-        if this_tile.state == this_tile.states[0]:
+        elif this_tile.state == this_tile.states[0]:
             this_tile.state = this_tile.states[1]
             this_tile.show_clue(self.count_bombs(position))
 
@@ -75,13 +87,18 @@ class Game:
         elif this_tile.state == this_tile.states[-1]:
             this_tile.show_bomb()
 
+    def first_click(self, position, amount_bombs):
+        """ Place bombs outside 3x3 square from first click. """
+        reserved = self.get_surrounding(position)
+        self.place_random_bombs(amount_bombs, reserved)
+
     def place_bomb(self, position):
         """ Changes the state of one tile to a bomb. position is tuple (posx, posy)"""
         this_tile = self.tile_list[position]
         this_tile.state = this_tile.states[-1]
         this_tile.show_empty()
 
-    def place_random_bombs(self, amount):
+    def place_random_bombs(self, amount, reserved):
         """ places [amount] random bombs onto the grid. """
         bombs = 0
         while bombs < amount:
@@ -90,8 +107,8 @@ class Game:
             sample_y = random.randint(0, self.columns - 1)
             new_potential_bomb = self.tile_list[(sample_x, sample_y)]
 
-            # if it's empty, place a bomb.
-            if new_potential_bomb.state == Tile.states[0]:
+            # if it's empty, place a bomb. # re-roll if it's reserved.
+            if new_potential_bomb.state == Tile.states[0] or (sample_x, sample_y) in reserved:
                 new_potential_bomb.state = Tile.states[-1]
                 new_potential_bomb.show_empty()
                 bombs += 1
