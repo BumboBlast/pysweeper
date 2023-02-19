@@ -1,5 +1,5 @@
-from tkinter import *
-from Game import  *
+
+from Game import *
 
 root = Tk()
 root.title('John Minesweeper')

@@ -1,4 +1,3 @@
-from tkinter import *
 from Tile import *
 
 """ Implements methods that affect the game state. """
