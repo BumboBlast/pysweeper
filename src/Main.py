@@ -1,6 +1,5 @@
-import random
-
-from Game import *
+from tkinter import *
+from Game import  *
 
 root = Tk()
 root.title('John Minesweeper')
