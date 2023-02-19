@@ -16,7 +16,9 @@ class Space:
 
         self.state = self.states[0]
         self.position = (posx, posy)
-        self.game_state = game
+
+        # address to the game class
+        self.game_handle = game
 
     def sink_button(self):
         """ Shows the button as depressed when mouse over, if empty or a bomb. """
@@ -43,7 +45,7 @@ class Space:
         if self.state == self.states[0]:
             self.state = self.states[2]
             self.button.config(state='disabled')
-            self.button.config(text=self.game_state.count_bombs(self.position))
+            self.button.config(text=self.game_handle.count_bombs(self.position))
 
         # explode if a bomb
         elif self.state == self.states[3]:

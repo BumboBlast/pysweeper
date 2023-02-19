@@ -1,3 +1,4 @@
+import random
 from Space import *
 
 
@@ -43,5 +44,16 @@ class Game:
             if space[0] in range(0, self.rows) and space[1] in range(0, self.columns):
                 if self.space_list[space].state == Space.states[3]:
                     bombs += 1
-
         return bombs
+
+    def place_random_mines(self, reserved):
+        # ~ 10 percent are bombs
+        # pick 10 percent random spots
+        for r in range(0, int(self.rows * self.columns * 0.1)):
+            sample_x = random.randrange(self.rows)
+            sample_y = random.randrange(self.columns)
+            if sample_x not in reserved and sample_y not in reserved:
+                self.add_bomb((sample_x, sample_y))
+
+    def get_adjacent_empties(self):
+        """ return a list of adjacent (not diagonal) positions to spaces that are empty. """

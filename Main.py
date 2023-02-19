@@ -1,16 +1,15 @@
+import random
+
 from Game import *
 
 root = Tk()
 root.title('John Minesweeper')
 root.bind('<Escape>', lambda event: root.destroy())
 
-game = Game(10, 10)
+number_rows = 10
+number_columns = 15
+game = Game(number_rows, number_columns)
 
-game.add_bomb((1, 1))
-game.add_bomb((2, 1))
-game.add_bomb((7, 8))
-
-print(game.count_bombs((1, 2)))
 
 # opens the window
 root.mainloop()
