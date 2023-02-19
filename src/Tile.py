@@ -44,28 +44,6 @@ class Tile:
         if self.state == self.states[0] or self.state == self.states[-1]:
             self.button.config(relief='raised')
 
-    def right_click(self):
-        """ Handles the right click event. """
-        # if empty, set to empty_flag
-        if self.state == self.states[0]:
-            self.state = self.states[2][0]
-            self.show_flag()
-
-        # if bomb, set to bomb_flag
-        elif self.state == self.states[-1]:
-            self.state = self.states[2][1]
-            self.show_flag()
-
-        # if flag_empty, then remove flag
-        elif self.state == self.states[2][0]:
-            self.state = self.states[0]
-            self.show_empty()
-
-        # if flag_bomb, then remove flag
-        elif self.state == self.states[2][1]:
-            self.state = self.states[-1]
-            self.show_empty()
-
     def left_click(self):
         """ Handles the left click event. """
 
@@ -98,7 +76,7 @@ class Tile:
         self.button.config(relief='raised')
         self.button.config(state='disabled')
         self.button.config(bg=self.clue['color'])
-        self.button.config(text=self.clue['text'])
+        self.button.config(text=self.clue['text'])  # how many surrounding bombs
 
     def show_flag(self):
         """ Change how this tile looks to being a flag. """
