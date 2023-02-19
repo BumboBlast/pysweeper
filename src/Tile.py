@@ -35,11 +35,11 @@ class Tile:
 
         #Small patch to make the game work under Linux;
         #Tkinter uses an invalid font for emojis which crashes the game under Ubuntu
-        if self.is_windows:
+        if not self.is_windows():
             self.flag['text'] = "FLAG"
             self.bomb['text'] = "BOMB"
     
-    def is_windows():
+    def is_windows(self):
         """ Small helper function to determine whether we're on Windows. Necessary since Tkinter has a bug on non-Windows machines """
         return sys.platform.startswith('win32') or sys.platform.startswith('cygwin') or sys.platform.startswith('msys')
 
