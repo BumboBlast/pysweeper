@@ -10,7 +10,7 @@
 --------------------------------------------
 
 ### Directions:
-Run main.py with your favorite Python interpreter.
+Run main.py with your favorite Python interpreter.<br>
 Left click checks a square for a mine. Right click toggles the flag for the square.
 
 --------------------------------------------
