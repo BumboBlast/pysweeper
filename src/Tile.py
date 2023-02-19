@@ -14,7 +14,7 @@ class Tile:
         'color': '#BFFFCB'
     }
     flag = {
-        'text': 'flag',
+        'text': '🚩',
         'color': '#FFC0CB'
     }
     bomb = {

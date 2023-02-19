@@ -7,12 +7,12 @@ from Tile import *
 
 class Game:
 
-    def __init__(self, rows, columns):
+    def __init__(self, rows, columns, amount_bombs):
         """ Makes a new game with the parameter's number of rows/ columns. """
 
         self.rows = rows
         self.columns = columns
-        self.amount_bombs = 25
+        self.amount_bombs = amount_bombs
 
         # keeps track of have completed the first click or not.
         self.not_first_clicked = True
@@ -66,8 +66,8 @@ class Game:
         # if it's the first click, then place random bombs away from 3x3 square from that tile.
         if self.not_first_clicked:
             self.not_first_clicked = False
-            self.first_click(position, self.amount_bombs)
             this_tile.state = this_tile.states[1]
+            self.first_click(position, self.amount_bombs)
             this_tile.show_clue(self.count_bombs(position))
 
         # if empty tile, then place a clue
@@ -79,7 +79,7 @@ class Game:
         elif this_tile.state == this_tile.states[1]:
             return
 
-        # if flag tile, then do nothing
+        # if flag tile, do nothing
         elif this_tile.state == this_tile.states[2][0] or this_tile.state == this_tile.states[2][1]:
             return
 
@@ -106,12 +106,21 @@ class Game:
             sample_x = random.randint(0, self.rows - 1)
             sample_y = random.randint(0, self.columns - 1)
             new_potential_bomb = self.tile_list[(sample_x, sample_y)]
+            if (sample_x, sample_y) in reserved:
+                continue
 
             # if it's empty, place a bomb. # re-roll if it's reserved.
-            if new_potential_bomb.state == Tile.states[0] or (sample_x, sample_y) in reserved:
+            if new_potential_bomb.state == Tile.states[0]:
                 new_potential_bomb.state = Tile.states[-1]
                 new_potential_bomb.show_empty()
                 bombs += 1
+
+        # remove the flags in the reserved spaces, if there are any
+        for reserved_position in reserved:
+            this_tile = self.tile_list[reserved_position]
+            if this_tile.state == Tile.states[2][0]:
+                self.right_click(reserved_position)
+                self.left_click(reserved_position)
 
     def clear_empties(self):
         """ This method should reveal each tile surrounding every 0 clue. """
