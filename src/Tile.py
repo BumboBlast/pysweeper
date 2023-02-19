@@ -6,8 +6,12 @@ from tkinter import *
 class Tile:
     states = ['empty', 'clue', ['flag_empty', 'flag_bomb'], 'bomb']
     empty = {
-        'text': ' ',
+        'text': '',
         'color': '#FFD9DF'
+    }
+    clue = {
+        'text': '',
+        'color': '#BFFFCB'
     }
     flag = {
         'text': 'flag',
@@ -18,19 +22,20 @@ class Tile:
         """ A Tile is a button with metadata. """
         self.position = (posx, posy)
         self.button = Button(height=3, width=6, bg=self.empty['color'])
-        self.button.bind('<Enter>', lambda event: self.select_button())
-        self.button.bind('<Leave>', lambda event: self.deselect_button())
+        self.button.bind('<Enter>', lambda event: self.highlight_tile())
+        self.button.bind('<Leave>', lambda event: self.de_highlight_tile())
         self.button.bind('<Button-3>', lambda event: self.right_click())
+        self.button.bind('<Button-1>', lambda event: self.left_click())
 
         # each tile starts out as empty
         self.state = self.states[0]
 
-    def select_button(self):
+    def highlight_tile(self):
         """ Button only reacts to cursor if its not been clicked on (empty or bomb) """
         if self.state == self.states[0] or self.state == self.states[-1]:
             self.button.config(relief='solid')
 
-    def deselect_button(self):
+    def de_highlight_tile(self):
         """ Button only reacts to cursor if its not been clicked on (empty or bomb) """
         if self.state == self.states[0] or self.state == self.states[-1]:
             self.button.config(relief='raised')
@@ -41,6 +46,7 @@ class Tile:
         if self.state == self.states[0]:
             self.state = self.states[2][0]
             self.button.config(relief='raised')
+            self.button.config(state='disabled')
             self.button.config(bg=self.flag['color'])
             self.button.config(text=self.flag['text'])
 
@@ -48,6 +54,7 @@ class Tile:
         elif self.state == self.states[-1]:
             self.state = self.states[2][1]
             self.button.config(relief='raised')
+            self.button.config(state='disabled')
             self.button.config(bg=self.flag['color'])
             self.button.config(text=self.flag['text'])
 
@@ -62,3 +69,14 @@ class Tile:
             self.state = self.states[-1]
             self.button.config(bg=self.empty['color'])
             self.button.config(text=self.empty['text'])
+
+    def left_click(self):
+        """ Handles the left click event. """
+
+        # if empty tile, then place a clue
+        if self.state == self.states[0]:
+            self.state = self.states[1]
+            self.button.config(relief='raised')
+            self.button.config(state='disabled')
+            self.button.config(bg=self.clue['color'])
+            self.button.config(text=self.clue['text'])
