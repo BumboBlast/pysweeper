@@ -1,4 +1,5 @@
 from tkinter import *
+import sys
 
 """ implements methods that affect the Tile Object. """
 
@@ -31,6 +32,16 @@ class Tile:
 
         # each tile starts out as empty
         self.state = self.states[0]
+
+        #Small patch to make the game work under Linux;
+        #Tkinter uses an invalid font for emojis which crashes the game under Ubuntu
+        if self.is_windows:
+            self.flag['text'] = "FLAG"
+            self.bomb['text'] = "BOMB"
+    
+    def is_windows():
+        """ Small helper function to determine whether we're on Windows. Necessary since Tkinter has a bug on non-Windows machines """
+        return sys.platform.startswith('win32') or sys.platform.startswith('cygwin') or sys.platform.startswith('msys')
 
     def highlight_tile(self):
         """ Button only reacts to cursor if it's not been clicked on (empty or bomb) """
