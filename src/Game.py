@@ -96,6 +96,14 @@ class Game:
                 new_potential_bomb.show_empty()
                 bombs += 1
 
+    def clear_empties(self):
+        """ This method should reveal each tile surrounding every 0 clue. """
+        for this_tile in self.tile_list.values():
+            # if it's a 0 clue, reveal all of it's surrounding.
+            if this_tile.state == Tile.states[1] and this_tile.button['text'] == '  ':
+                for this_surrounding in self.get_surrounding(this_tile.position):
+                    self.left_click(this_surrounding)
+
     def get_surrounding(self, position):
         """ Returns a list of the legal, surrounding (including center) spaces. """
         surrounding = [
@@ -129,5 +137,7 @@ class Game:
                 bombs += 1
 
         if bombs == 0:
+            self.tile_list[position].button.config(text='  ')
+            self.clear_empties()
             return '  '
         return bombs
