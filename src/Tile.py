@@ -18,7 +18,7 @@ class Tile:
         'color': '#FFC0CB'
     }
     bomb = {
-        'text': 'bomb',
+        'text': '💣',
         'color': 'red'
     }
 
